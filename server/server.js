@@ -842,7 +842,8 @@ function handleMcpMessage(req, msg) {
 
   if (method === "initialize") {
     return rpcResult(id, {
-      protocolVersion: "2025-11-25",
+      protocolVersion: params.protocolVersion || "2025-06-18",
+
             capabilities: { tools: {}, streamableHttp: {} },
 
       serverInfo: {
@@ -883,7 +884,7 @@ function handleMcpMessage(req, msg) {
 }
 
 app.get("/mcp", (req, res) => {
-  res.type("text/plain").send("CineIsle MCP endpoint is running. Use POST JSON-RPC.");
+  res.status(405).set("Allow", "POST").end();
 });
 
 app.post("/mcp", (req, res) => {
