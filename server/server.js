@@ -661,12 +661,13 @@ function setPlaybackCommand(r, args, action) {
   return ctx.playbackCommand;
 }
 
+function slimForAI(o){if(!o||typeof o!=="object")return o;const r=o.room&&typeof o.room==="object"?o.room:(o.id&&o.context?o:null);const c=o.context||(r&&r.context)||{};const s={};if(o.ok!==undefined)s.ok=o.ok;if(r){s.room=r.id;s.title=r.title;s.time=Math.round(r.currentTime||0);s.duration=Math.round(r.duration||0);s.paused=r.paused;s.messages=(r.messages||[]).slice(-5);}s.currentSubtitle=c.currentSubtitle||"";s.recentSubtitles=(c.recentSubtitles||[]).slice(-5);s.frameUpdatedAt=c.frameUpdatedAt||null;if(o.text)s.screenText=o.text;if(o.note)s.note=o.note;if(o.message&&o.message.text)s.sent=o.message.text;return s;}
 function mcpText(obj) {
   return {
     content: [
       {
         type: "text",
-        text: typeof obj === "string" ? obj : JSON.stringify(stripFrameData(obj), null, 2)
+        text: typeof obj === "string" ? obj : JSON.stringify(slimForAI(stripFrameData(obj)))
       }
     ]
   };
